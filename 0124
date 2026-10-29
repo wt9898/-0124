@@ -1,954 +1,201 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>365日每日運勢 🎂 生日快樂！</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Zen Maru Gothic (可愛圓體) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome 圖標 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti 慶祝特效 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cream: '#FFF9F0',
-                        warmPink: '#FFB7B2',
-                        pastelYellow: '#FFE5B4',
-                        softOrange: '#FFDAC1',
-                        accentPink: '#FF8B94',
-                    },
-                    fontFamily: {
-                        cute: ['Zen Maru Gothic', 'sans-serif'],
-                    },
-                    animation: {
-                        'bounce-slow': 'bounce 2s infinite',
-                        'float': 'float 3s ease-in-out infinite',
-                        'pulse-gentle': 'pulseGentle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        pulseGentle: {
-                            '0%, 100%': { opacity: 1, transform: 'scale(1)' },
-                            '50%': { opacity: 0.9, transform: 'scale(1.02)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日打氣站 🍕🦊</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #fdfbf7;
+      --card-bg: #ffffff;
+      --primary: #ff8c42;
+      --text-main: #4a3e3d;
+      --text-sub: #8c7b75;
+      --border-color: #f0e6df;
+    }
 
-    <style>
-        body {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: #FFF9F0;
-            background-image: radial-gradient(#FFDAC1 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    header {
+      text-align: center;
+      padding: 40px 20px 10px;
+    }
 
-        .btn-cute {
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0px 6px 0px #FFB7B2;
-        }
-        .btn-cute:active {
-            transform: translateY(4px);
-            box-shadow: 0px 2px 0px #FFB7B2;
-        }
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
 
-        .heart-particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-            animation: floatUp 6s linear infinite;
-            opacity: 0.6;
-        }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-top: 8px;
+    }
 
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
+    .main-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 30px 20px;
+      margin: 20px;
+      width: 85%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+    }
 
-        /* Flip card effect */
-        .card-flip-inner {
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-        .card-flipped {
-            transform: rotateY(180deg);
-        }
-    </style>
+    .btn-open {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .btn-open:active {
+      transform: scale(0.96);
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px 24px;
+      border-radius: 24px;
+      width: 85%;
+      max-width: 380px;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .modal-body {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      white-space: pre-line;
+      margin-bottom: 24px;
+    }
+
+    .btn-close {
+      background: #f0f0f0;
+      color: #666;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="min-h-screen text-gray-700 flex flex-col justify-between relative overflow-x-hidden pb-12">
+<body>
 
-    <!-- 背景漂浮粒子 -->
-    <div id="particles-container" class="fixed inset-0 pointer-events-none z-0"></div>
+  <header>
+    <h1>每日打氣站 🍕🦊</h1>
+    <div class="subtitle">365 天陪伴你的暖心小卡</div>
+  </header>
 
-    <!-- 🧪 頂部預覽 / 測試模式控制列 -->
-    <div class="bg-amber-100 border-b-2 border-amber-300 px-4 py-2 text-xs text-amber-900 flex flex-wrap items-center justify-between gap-2 relative z-20 shadow-sm">
-        <div class="flex items-center gap-2">
-            <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded-md text-[10px] animate-pulse">測試工具</span>
-            <span class="font-bold">🧪 網頁預覽測試模式：</span>
-            <span class="text-amber-700 hidden sm:inline">（切換以提前測試卡片解鎖與翻牌效果）</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="test-mode-toggle" onchange="toggleTestMode()" class="sr-only peer">
-                <div class="relative w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accentPink"></div>
-                <span class="ms-2 font-bold text-xs" id="test-mode-status">解鎖所有日期 (OFF)</span>
-            </label>
-            <button onclick="previewDayCard(1)" class="bg-accentPink hover:bg-red-400 text-white font-bold px-3 py-1 rounded-xl shadow-xs text-xs flex items-center gap-1 transition">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> 試玩：開箱睇 Day 1 運勢
-            </button>
-        </div>
+  <div class="main-card">
+    <p style="font-size: 1.1rem; margin-bottom: 20px;">今日係 <b id="today-date">--</b></p>
+    <button class="btn-open" onclick="openTodayCard()">拆開今日打氣心語 💌</button>
+  </div>
+
+  <div class="modal-overlay" id="cardModal">
+    <div class="modal-content">
+      <div class="modal-title" id="mTitle">標題</div>
+      <div class="modal-body" id="mContent">內容</div>
+      <button class="btn-close" onclick="closeModal()">收到！❤️</button>
     </div>
-
-    <!-- 頂部導覽列 -->
-    <header class="relative z-10 w-full max-w-4xl mx-auto pt-6 px-4 text-center">
-        <div class="bg-white/80 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-lg border-4 border-pastelYellow flex flex-col sm:flex-row items-center justify-between gap-4">
-            
-            <!-- 【公仔位 1：Header 大頭照】 -->
-            <div class="relative group cursor-pointer" onclick="previewDayCard(1)" title="點擊預覽">
-                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-pastelYellow border-4 border-white shadow-md flex items-center justify-center overflow-hidden animate-float">
-                    <img id="header-avatar" src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=BirthdayBear&backgroundColor=ffe5b4" alt="生日吉祥物" class="w-full h-full object-cover">
-                </div>
-                <span class="absolute -bottom-2 -right-1 bg-accentPink text-white text-xs font-bold px-2 py-0.5 rounded-full shadow">Day <span id="current-day-badge">1</span></span>
-            </div>
-
-            <div class="text-center sm:text-left flex-1">
-                <div class="inline-block bg-pastelYellow text-amber-800 text-xs font-bold px-3 py-1 rounded-full mb-1">
-                    🎂 生日驚喜限定 · 365日籤筒 (2027-2028)
-                </div>
-                <h1 class="text-2xl sm:text-3xl font-black text-gray-800 tracking-wide">
-                    每日幸運抽籤簿 ✨
-                </h1>
-                <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                    由 2027年1月24號 起，每日為你解鎖專屬嘅運勢同祝福！
-                </p>
-            </div>
-
-            <!-- 計時器 -->
-            <div class="bg-cream rounded-2xl p-3 border-2 border-softOrange text-center min-w-[140px]">
-                <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider" id="countdown-label">距離聽日解鎖仲有</div>
-                <div id="countdown-timer" class="text-base font-black text-accentPink font-mono mt-0.5">00:00:00</div>
-            </div>
-        </div>
-    </header>
-
-    <!-- 主要內容區 -->
-    <main class="relative z-10 w-full max-w-4xl mx-auto px-4 mt-6 flex-1 flex flex-col gap-8">
-
-        <!-- 今日運勢主卡片 -->
-        <section id="today-section" class="w-full">
-            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-warmPink relative overflow-hidden transition-all duration-300">
-                <div class="absolute -right-12 top-6 bg-accentPink text-white font-black text-xs px-12 py-1.5 rotate-45 shadow-sm">
-                    TODAY ✨
-                </div>
-
-                <div class="flex flex-col md:flex-row items-center gap-6">
-                    <!-- 【公仔位 2：今日主圖】 -->
-                    <div class="w-36 h-36 sm:w-44 sm:h-44 flex-shrink-0 bg-cream rounded-2xl border-4 border-pastelYellow p-2 shadow-inner flex flex-col items-center justify-center relative">
-                        <img id="today-mascot" src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=BirthdayBear&backgroundColor=ffe5b4" alt="當日吉祥物" class="w-full h-full object-contain animate-bounce-slow">
-                        <div class="absolute bottom-1 bg-white/90 px-2 py-0.5 rounded-full text-[10px] text-gray-500 font-bold shadow-xs">
-                            今日主角
-                        </div>
-                    </div>
-
-                    <!-- 內容區 -->
-                    <div class="flex-1 text-center md:text-left w-full">
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-                            <span id="today-day-number" class="bg-warmPink text-white font-bold text-xs px-2.5 py-1 rounded-lg">Day --</span>
-                            <span id="today-date-str" class="text-xs text-gray-400 font-medium">--月--日</span>
-                        </div>
-
-                        <h2 id="today-title" class="text-xl sm:text-2xl font-black text-gray-800 mb-2">
-                            點擊下面按鈕拆開今日運勢！
-                        </h2>
-
-                        <!-- 翻牌前 (未解鎖) -->
-                        <div id="locked-today-view" class="py-2 flex flex-col items-center md:items-start">
-                            <p id="locked-today-desc" class="text-gray-500 text-sm mb-4">聽日嘅運勢仲未知，但今日嘅幸運已經為你準備好啦！</p>
-                            
-                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                                <button id="unlock-today-btn" onclick="revealTodayFortune()" class="btn-cute bg-accentPink hover:bg-red-400 text-white font-black text-base px-8 py-3 rounded-2xl flex items-center gap-2 cursor-pointer">
-                                    <i class="fa-solid fa-gift text-lg"></i> 解鎖今日運勢
-                                </button>
-                                
-                                <button onclick="previewDayCard(1)" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-sm px-5 py-3 rounded-2xl flex items-center gap-2 cursor-pointer shadow-sm transition">
-                                    <i class="fa-solid fa-eye"></i> 預覽 Day 1 效果
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 翻牌後 (已解鎖) -->
-                        <div id="unlocked-today-view" class="hidden space-y-4">
-                            <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 bg-cream p-3 rounded-2xl border border-softOrange text-xs font-bold text-gray-600">
-                                <div>幸運指數：<span id="today-stars" class="text-amber-400 text-sm">★★★★★</span></div>
-                                <div>幸運色：<span id="today-color" class="text-accentPink">---</span></div>
-                                <div>幸運小物：<span id="today-item" class="text-amber-600">---</span></div>
-                            </div>
-
-                            <div class="bg-cream p-4 rounded-2xl border-2 border-dashed border-warmPink text-gray-700 text-sm sm:text-base leading-relaxed" id="today-content">
-                                運勢內容載入中...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 365天日曆網格 -->
-        <section class="w-full">
-            <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-lg border-4 border-pastelYellow">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
-                    <div>
-                        <h3 class="text-xl font-black text-gray-800 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-accentPink"></i> 365日運勢日曆
-                        </h3>
-                        <p class="text-xs text-gray-400 mt-0.5">點擊任何一天即可預覽或回顧運勢內容喔！</p>
-                    </div>
-                    
-                    <div class="bg-cream px-3 py-1.5 rounded-xl border border-softOrange text-xs font-bold text-gray-600">
-                        解鎖進度：<span id="unlocked-count" class="text-accentPink font-black">0</span> / 365 日
-                    </div>
-                </div>
-
-                <!-- 月份分頁 -->
-                <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar" id="month-tabs"></div>
-
-                <!-- 日曆 Grid -->
-                <div id="calendar-grid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2.5 max-h-[450px] overflow-y-auto p-1 rounded-2xl"></div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- 頁尾 -->
-    <footer class="relative z-10 w-full max-w-4xl mx-auto mt-8 px-4 text-center text-xs text-gray-400">
-        <p>Made with ❤️ for Your Birthday | 每日一份小驚喜 ✨</p>
-    </footer>
-
-    <!-- Modal 彈窗 (運勢卡片解鎖) -->
-    <div id="fortune-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-pastelYellow relative transition-all" id="modal-container">
-            
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 bg-cream hover:bg-softOrange rounded-full flex items-center justify-center text-gray-500 font-bold text-lg z-20">
-                ✕
-            </button>
-
-            <!-- 【公仔位 3：Modal 彈窗圖】 -->
-            <div class="w-28 h-28 mx-auto -mt-12 bg-pastelYellow border-4 border-white rounded-full p-1 shadow-lg flex items-center justify-center overflow-hidden relative z-10">
-                <img id="modal-mascot" src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=HappyBear&backgroundColor=ffe5b4" alt="Modal Mascot" class="w-full h-full object-cover">
-            </div>
-
-            <div class="text-center mt-3">
-                <div id="modal-badge" class="inline-block bg-warmPink text-white text-xs font-bold px-3 py-0.5 rounded-full mb-2">
-                    Day 1 · 1月24日
-                </div>
-                <h3 id="modal-title" class="text-xl font-black text-gray-800 mb-2">
-                    標題
-                </h3>
-
-                <!-- 未來鎖定提示 -->
-                <div id="modal-locked-body" class="hidden space-y-3 my-4">
-                    <p class="text-gray-600 text-sm font-medium leading-relaxed bg-cream p-4 rounded-2xl border border-softOrange">
-                        🔒 未來仲未到，留返啲驚喜畀聽日啦！<br>
-                        好酒沉樽底，記得聽日再嚟開箱喔 ✨
-                    </p>
-                    <div class="flex gap-2">
-                        <button onclick="closeModal()" class="btn-cute flex-1 bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl">
-                            知道了
-                        </button>
-                        <button onclick="forceUnlockCurrentModal()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1">
-                            🧪 測試：強制開箱
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 已解鎖內容 -->
-                <div id="modal-unlocked-body" class="hidden space-y-4 my-3 text-left">
-                    <div class="flex justify-around bg-cream p-2.5 rounded-xl border border-softOrange text-xs font-bold text-gray-600 text-center">
-                        <div>幸運指數<br><span id="modal-stars" class="text-amber-400 text-sm">★★★★★</span></div>
-                        <div>幸運色<br><span id="modal-color" class="text-accentPink">草莓粉</span></div>
-                        <div>幸運小物<br><span id="modal-item" class="text-amber-600">蛋糕</span></div>
-                    </div>
-
-                    <div id="modal-content" class="bg-cream/60 p-4 rounded-2xl border border-dashed border-warmPink text-gray-700 text-sm leading-relaxed max-h-56 overflow-y-auto">
-                        運勢內容...
-                    </div>
-
-                    <button onclick="triggerConfetti()" class="w-full bg-pastelYellow hover:bg-amber-200 text-amber-900 font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition">
-                        🎉 再放一次彩帶慶祝！
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        /* =========================================================================
-           1. 🎨 手繪公仔圖片設定 (可換成你上傳的圖床連結)
-           =========================================================================
-        */
-        const CUSTOM_MASCOTS = {
-            header: "https://api.dicebear.com/7.x/bottts-neutral/svg?seed=BirthdayBear&backgroundColor=ffe5b4",
-            happy: "https://api.dicebear.com/7.x/bottts-neutral/svg?seed=HappyBear&backgroundColor=ffe5b4",
-            locked: "https://api.dicebear.com/7.x/bottts-neutral/svg?seed=LockedMascot&backgroundColor=ffe5b4"
-        };
-
-
-        /* =========================================================================
-           2. 📜 365日運勢資料庫
-           =========================================================================
-        */
-        /* =========================================================================
-   2. 📜 365日運勢資料庫 (Fortune Database - Day 1 to 365)
-   =========================================================================
-*/
-const fortuneDatabase = [
-    { day: 1, date: "2027-01-24", title: "teaser26歲生日快樂！今日你係大佬😼", stars: "★★★★★", content: "瓜瓜26歲了，好開心可以同你度過4年嘅生日。前兩年都係回顧，今年我希望可以同你展望未來。新一年，pizza同每日運勢會同你一齊度過！🍕❤️🦊" },
-    { day: 2, date: "2027-01-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 3, date: "2027-01-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 4, date: "2027-01-27", title: "", stars: "★★★☆☆", content: "" },
-    { day: 5, date: "2027-01-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 6, date: "2027-01-29", title: "", stars: "★★★★★", content: "" },
-    { day: 7, date: "2027-01-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 8, date: "2027-01-31", title: "", stars: "★★★★★", content: "" },
-    { day: 9, date: "2027-02-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 10, date: "2027-02-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 11, date: "2027-02-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 12, date: "2027-02-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 13, date: "2027-02-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 14, date: "2027-02-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 15, date: "2027-02-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 16, date: "2027-02-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 17, date: "2027-02-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 18, date: "2027-02-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 19, date: "2027-02-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 20, date: "2027-02-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 21, date: "2027-02-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 22, date: "2027-02-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 23, date: "2027-02-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 24, date: "2027-02-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 25, date: "2027-02-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 26, date: "2027-02-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 27, date: "2027-02-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 28, date: "2027-02-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 29, date: "2027-02-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 30, date: "2027-02-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 31, date: "2027-02-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 32, date: "2027-02-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 33, date: "2027-02-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 34, date: "2027-02-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 35, date: "2027-02-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 36, date: "2027-02-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 37, date: "2027-03-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 38, date: "2027-03-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 39, date: "2027-03-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 40, date: "2027-03-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 41, date: "2027-03-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 42, date: "2027-03-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 43, date: "2027-03-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 44, date: "2027-03-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 45, date: "2027-03-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 46, date: "2027-03-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 47, date: "2027-03-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 48, date: "2027-03-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 49, date: "2027-03-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 50, date: "2027-03-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 51, date: "2027-03-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 52, date: "2027-03-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 53, date: "2027-03-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 54, date: "2027-03-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 55, date: "2027-03-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 56, date: "2027-03-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 57, date: "2027-03-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 58, date: "2027-03-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 59, date: "2027-03-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 60, date: "2027-03-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 61, date: "2027-03-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 62, date: "2027-03-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 63, date: "2027-03-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 64, date: "2027-03-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 65, date: "2027-03-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 66, date: "2027-03-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 67, date: "2027-03-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 68, date: "2027-04-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 69, date: "2027-04-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 70, date: "2027-04-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 71, date: "2027-04-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 72, date: "2027-04-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 73, date: "2027-04-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 74, date: "2027-04-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 75, date: "2027-04-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 76, date: "2027-04-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 77, date: "2027-04-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 78, date: "2027-04-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 79, date: "2027-04-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 80, date: "2027-04-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 81, date: "2027-04-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 82, date: "2027-04-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 83, date: "2027-04-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 84, date: "2027-04-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 85, date: "2027-04-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 86, date: "2027-04-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 87, date: "2027-04-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 88, date: "2027-04-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 89, date: "2027-04-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 90, date: "2027-04-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 91, date: "2027-04-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 92, date: "2027-04-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 93, date: "2027-04-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 94, date: "2027-04-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 95, date: "2027-04-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 96, date: "2027-04-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 97, date: "2027-04-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 98, date: "2027-05-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 99, date: "2027-05-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 100, date: "2027-05-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 101, date: "2027-05-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 102, date: "2027-05-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 103, date: "2027-05-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 104, date: "2027-05-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 105, date: "2027-05-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 106, date: "2027-05-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 107, date: "2027-05-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 108, date: "2027-05-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 109, date: "2027-05-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 110, date: "2027-05-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 111, date: "2027-05-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 112, date: "2027-05-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 113, date: "2027-05-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 114, date: "2027-05-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 115, date: "2027-05-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 116, date: "2027-05-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 117, date: "2027-05-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 118, date: "2027-05-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 119, date: "2027-05-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 120, date: "2027-05-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 121, date: "2027-05-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 122, date: "2027-05-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 123, date: "2027-05-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 124, date: "2027-05-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 125, date: "2027-05-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 126, date: "2027-05-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 127, date: "2027-05-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 128, date: "2027-05-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 129, date: "2027-06-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 130, date: "2027-06-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 131, date: "2027-06-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 132, date: "2027-06-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 133, date: "2027-06-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 134, date: "2027-06-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 135, date: "2027-06-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 136, date: "2027-06-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 137, date: "2027-06-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 138, date: "2027-06-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 139, date: "2027-06-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 140, date: "2027-06-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 141, date: "2027-06-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 142, date: "2027-06-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 143, date: "2027-06-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 144, date: "2027-06-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 145, date: "2027-06-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 146, date: "2027-06-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 147, date: "2027-06-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 148, date: "2027-06-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 149, date: "2027-06-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 150, date: "2027-06-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 151, date: "2027-06-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 152, date: "2027-06-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 153, date: "2027-06-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 154, date: "2027-06-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 155, date: "2027-06-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 156, date: "2027-06-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 157, date: "2027-06-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 158, date: "2027-06-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 159, date: "2027-07-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 160, date: "2027-07-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 161, date: "2027-07-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 162, date: "2027-07-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 163, date: "2027-07-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 164, date: "2027-07-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 165, date: "2027-07-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 166, date: "2027-07-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 167, date: "2027-07-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 168, date: "2027-07-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 169, date: "2027-07-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 170, date: "2027-07-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 171, date: "2027-07-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 172, date: "2027-07-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 173, date: "2027-07-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 174, date: "2027-07-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 175, date: "2027-07-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 176, date: "2027-07-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 177, date: "2027-07-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 178, date: "2027-07-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 179, date: "2027-07-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 180, date: "2027-07-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 181, date: "2027-07-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 182, date: "2027-07-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 183, date: "2027-07-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 184, date: "2027-07-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 185, date: "2027-07-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 186, date: "2027-07-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 187, date: "2027-07-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 188, date: "2027-07-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 189, date: "2027-07-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 190, date: "2027-08-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 191, date: "2027-08-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 192, date: "2027-08-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 193, date: "2027-08-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 194, date: "2027-08-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 195, date: "2027-08-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 196, date: "2027-08-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 197, date: "2027-08-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 198, date: "2027-08-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 199, date: "2027-08-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 200, date: "2027-08-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 201, date: "2027-08-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 202, date: "2027-08-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 203, date: "2027-08-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 204, date: "2027-08-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 205, date: "2027-08-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 206, date: "2027-08-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 207, date: "2027-08-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 208, date: "2027-08-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 209, date: "2027-08-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 210, date: "2027-08-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 211, date: "2027-08-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 212, date: "2027-08-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 213, date: "2027-08-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 214, date: "2027-08-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 215, date: "2027-08-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 216, date: "2027-08-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 217, date: "2027-08-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 218, date: "2027-08-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 219, date: "2027-08-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 220, date: "2027-08-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 221, date: "2027-09-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 222, date: "2027-09-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 223, date: "2027-09-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 224, date: "2027-09-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 225, date: "2027-09-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 226, date: "2027-09-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 227, date: "2027-09-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 228, date: "2027-09-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 229, date: "2027-09-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 230, date: "2027-09-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 231, date: "2027-09-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 232, date: "2027-09-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 233, date: "2027-09-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 234, date: "2027-09-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 235, date: "2027-09-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 236, date: "2027-09-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 237, date: "2027-09-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 238, date: "2027-09-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 239, date: "2027-09-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 240, date: "2027-09-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 241, date: "2027-09-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 242, date: "2027-09-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 243, date: "2027-09-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 244, date: "2027-09-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 245, date: "2027-09-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 246, date: "2027-09-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 247, date: "2027-09-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 248, date: "2027-09-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 249, date: "2027-09-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 250, date: "2027-09-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 251, date: "2027-10-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 252, date: "2027-10-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 253, date: "2027-10-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 254, date: "2027-10-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 255, date: "2027-10-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 256, date: "2027-10-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 257, date: "2027-10-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 258, date: "2027-10-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 259, date: "2027-10-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 260, date: "2027-10-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 261, date: "2027-10-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 262, date: "2027-10-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 263, date: "2027-10-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 264, date: "2027-10-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 265, date: "2027-10-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 266, date: "2027-10-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 267, date: "2027-10-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 268, date: "2027-10-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 269, date: "2027-10-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 270, date: "2027-10-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 271, date: "2027-10-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 272, date: "2027-10-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 273, date: "2027-10-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 274, date: "2027-10-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 275, date: "2027-10-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 276, date: "2027-10-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 277, date: "2027-10-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 278, date: "2027-10-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 279, date: "2027-10-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 280, date: "2027-10-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 281, date: "2027-10-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 282, date: "2027-11-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 283, date: "2027-11-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 284, date: "2027-11-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 285, date: "2027-11-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 286, date: "2027-11-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 287, date: "2027-11-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 288, date: "2027-11-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 289, date: "2027-11-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 290, date: "2027-11-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 291, date: "2027-11-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 292, date: "2027-11-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 293, date: "2027-11-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 294, date: "2027-11-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 295, date: "2027-11-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 296, date: "2027-11-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 297, date: "2027-11-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 298, date: "2027-11-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 299, date: "2027-11-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 300, date: "2027-11-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 301, date: "2027-11-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 302, date: "2027-11-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 303, date: "2027-11-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 304, date: "2027-11-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 305, date: "2027-11-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 306, date: "2027-11-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 307, date: "2027-11-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 308, date: "2027-11-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 309, date: "2027-11-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 310, date: "2027-11-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 311, date: "2027-11-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 312, date: "2027-12-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 313, date: "2027-12-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 314, date: "2027-12-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 315, date: "2027-12-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 316, date: "2027-12-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 317, date: "2027-12-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 318, date: "2027-12-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 319, date: "2027-12-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 320, date: "2027-12-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 321, date: "2027-12-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 322, date: "2027-12-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 323, date: "2027-12-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 324, date: "2027-12-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 325, date: "2027-12-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 326, date: "2027-12-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 327, date: "2027-12-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 328, date: "2027-12-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 329, date: "2027-12-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 330, date: "2027-12-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 331, date: "2027-12-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 332, date: "2027-12-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 333, date: "2027-12-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 334, date: "2027-12-23", title: "", stars: "★★★★☆", content: "" },
-    { day: 335, date: "2027-12-24", title: "", stars: "★★★★☆", content: "" },
-    { day: 336, date: "2027-12-25", title: "", stars: "★★★★☆", content: "" },
-    { day: 337, date: "2027-12-26", title: "", stars: "★★★★☆", content: "" },
-    { day: 338, date: "2027-12-27", title: "", stars: "★★★★☆", content: "" },
-    { day: 339, date: "2027-12-28", title: "", stars: "★★★★☆", content: "" },
-    { day: 340, date: "2027-12-29", title: "", stars: "★★★★☆", content: "" },
-    { day: 341, date: "2027-12-30", title: "", stars: "★★★★☆", content: "" },
-    { day: 342, date: "2027-12-31", title: "", stars: "★★★★☆", content: "" },
-    { day: 343, date: "2028-01-01", title: "", stars: "★★★★☆", content: "" },
-    { day: 344, date: "2028-01-02", title: "", stars: "★★★★☆", content: "" },
-    { day: 345, date: "2028-01-03", title: "", stars: "★★★★☆", content: "" },
-    { day: 346, date: "2028-01-04", title: "", stars: "★★★★☆", content: "" },
-    { day: 347, date: "2028-01-05", title: "", stars: "★★★★☆", content: "" },
-    { day: 348, date: "2028-01-06", title: "", stars: "★★★★☆", content: "" },
-    { day: 349, date: "2028-01-07", title: "", stars: "★★★★☆", content: "" },
-    { day: 350, date: "2028-01-08", title: "", stars: "★★★★☆", content: "" },
-    { day: 351, date: "2028-01-09", title: "", stars: "★★★★☆", content: "" },
-    { day: 352, date: "2028-01-10", title: "", stars: "★★★★☆", content: "" },
-    { day: 353, date: "2028-01-11", title: "", stars: "★★★★☆", content: "" },
-    { day: 354, date: "2028-01-12", title: "", stars: "★★★★☆", content: "" },
-    { day: 355, date: "2028-01-13", title: "", stars: "★★★★☆", content: "" },
-    { day: 356, date: "2028-01-14", title: "", stars: "★★★★☆", content: "" },
-    { day: 357, date: "2028-01-15", title: "", stars: "★★★★☆", content: "" },
-    { day: 358, date: "2028-01-16", title: "", stars: "★★★★☆", content: "" },
-    { day: 359, date: "2028-01-17", title: "", stars: "★★★★☆", content: "" },
-    { day: 360, date: "2028-01-18", title: "", stars: "★★★★☆", content: "" },
-    { day: 361, date: "2028-01-19", title: "", stars: "★★★★☆", content: "" },
-    { day: 362, date: "2028-01-20", title: "", stars: "★★★★☆", content: "" },
-    { day: 363, date: "2028-01-21", title: "", stars: "★★★★☆", content: "" },
-    { day: 364, date: "2028-01-22", title: "", stars: "★★★★☆", content: "" },
-    { day: 365, date: "2028-01-23", title: "", stars: "★★★★☆", content: "" }
-];
-
-
-
-        /* =========================================================================
-           3. 🗓️ 日期與測試模式控制
-           =========================================================================
-        */
-        const START_DATE = new Date(2027, 0, 24); // 2027年1月24日
-        let isTestMode = false;
-        let activeModalDay = 1;
-
-        function getCurrentDayNumber() {
-            if (isTestMode) return 365; // 測試模式下自動允許解鎖所有天數
-
-            const now = new Date();
-            const todayZero = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const startZero = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
-
-            if (todayZero < startZero) return 0; // 0 代表未到2027年1月24日
-
-            const diffTime = todayZero - startZero;
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            return Math.min(diffDays, 365);
-        }
-
-        function toggleTestMode() {
-            isTestMode = document.getElementById('test-mode-toggle').checked;
-            document.getElementById('test-mode-status').innerText = isTestMode ? "已解鎖所有日期 (ON)" : "實時日期鎖定 (OFF)";
-            document.getElementById('test-mode-status').className = isTestMode ? "ms-2 font-bold text-xs text-accentPink" : "ms-2 font-bold text-xs";
-            
-            initApp();
-        }
-
-
-        /* =========================================================================
-           4. ⏱️ 倒計時器
-           =========================================================================
-        */
-        function updateCountdown() {
-            const now = new Date();
-            const todayDay = getCurrentDayNumber();
-            let targetDate = (todayDay === 0 && !isTestMode) ? START_DATE : new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            const diff = targetDate - now;
-
-            if (diff <= 0 && !isTestMode) { location.reload(); return; }
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
-            const minutes = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
-            const seconds = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
-
-            document.getElementById('countdown-label').innerText = (todayDay === 0 && !isTestMode) ? "距離生日正式開始" : "距離聽日解鎖仲有";
-            document.getElementById('countdown-timer').innerText = (todayDay === 0 && days > 0 && !isTestMode) ? `${days}日 ${hours}:${minutes}:${seconds}` : `${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateCountdown, 1000);
-
-
-        /* =========================================================================
-           5. 🎨 應用程式渲染 logic
-           =========================================================================
-        */
-        let currentFilterMonth = 'ALL';
-
-        function initApp() {
-            const todayDay = getCurrentDayNumber();
-
-            // 計算 365 天日期標籤
-            fortuneDatabase.forEach((item, index) => {
-                const dateObj = new Date(2027, 0, 24);
-                dateObj.setDate(dateObj.getDate() + index);
-                item.dateStr = `${dateObj.getMonth() + 1}月${dateObj.getDate()}日`;
-            });
-
-            document.getElementById('current-day-badge').innerText = isTestMode ? '測試中' : (todayDay > 0 ? todayDay : '未開始');
-            document.getElementById('header-avatar').src = CUSTOM_MASCOTS.header;
-
-            if (todayDay === 0 && !isTestMode) {
-                document.getElementById('today-day-number').innerText = `Day 1 (未到期)`;
-                document.getElementById('today-date-str').innerText = "2027年1月24日";
-                document.getElementById('today-title').innerText = "🎂 倒數迎接 2027 年生日禮物！";
-                document.getElementById('locked-today-desc').innerText = "生日仲未到喔！禮物會喺 2027年1月24日 正式解鎖！";
-                document.getElementById('unlocked-count').innerText = 0;
-            } else {
-                const activeDay = todayDay === 0 ? 1 : todayDay;
-                const todayData = fortuneDatabase.find(d => d.day === activeDay) || fortuneDatabase[0];
-                document.getElementById('today-day-number').innerText = `Day ${todayData.day}`;
-                document.getElementById('today-date-str').innerText = todayData.dateStr;
-
-                if (localStorage.getItem(`unlocked_day_${todayData.day}`) === 'true' || isTestMode) {
-                    showTodayUnlockedState(todayData);
-                }
-                document.getElementById('unlocked-count').innerText = isTestMode ? 365 : todayDay;
-            }
-
-            renderMonthTabs();
-            renderCalendarGrid();
-            createHeartParticles();
-            updateCountdown();
-        }
-
-        function revealTodayFortune() {
-            const todayDay = getCurrentDayNumber();
-            const activeDay = todayDay === 0 ? 1 : todayDay;
-            const todayData = fortuneDatabase.find(d => d.day === activeDay) || fortuneDatabase[0];
-            
-            localStorage.setItem(`unlocked_day_${activeDay}`, 'true');
-            showTodayUnlockedState(todayData);
-            triggerConfetti();
-        }
-
-        function showTodayUnlockedState(data) {
-            document.getElementById('locked-today-view').classList.add('hidden');
-            document.getElementById('unlocked-today-view').classList.remove('hidden');
-
-            document.getElementById('today-title').innerText = data.title;
-            document.getElementById('today-stars').innerText = data.stars;
-            document.getElementById('today-color').innerText = data.color;
-            document.getElementById('today-item').innerText = data.item;
-            document.getElementById('today-content').innerText = data.content;
-            document.getElementById('today-mascot').src = CUSTOM_MASCOTS.happy;
-        }
-
-        function renderMonthTabs() {
-            const container = document.getElementById('month-tabs');
-            container.innerHTML = '';
-
-            const ranges = [
-                { name: '全部 365 日', key: 'ALL' },
-                { name: '第1-30日', key: 'R1' },
-                { name: '第31-60日', key: 'R2' },
-                { name: '第61-90日', key: 'R3' },
-                { name: '第91-180日', key: 'R4' },
-                { name: '第181-270日', key: 'R5' },
-                { name: '第271-365日', key: 'R6' }
-            ];
-
-            ranges.forEach(r => {
-                const btn = document.createElement('button');
-                btn.className = `px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition ${currentFilterMonth === r.key ? 'bg-accentPink text-white' : 'bg-cream text-gray-600 hover:bg-pastelYellow'}`;
-                btn.innerText = r.name;
-                btn.onclick = () => { currentFilterMonth = r.key; renderMonthTabs(); renderCalendarGrid(); };
-                container.appendChild(btn);
-            });
-        }
-
-        function renderCalendarGrid() {
-            const grid = document.getElementById('calendar-grid');
-            grid.innerHTML = '';
-            const todayDay = getCurrentDayNumber();
-
-            let list = fortuneDatabase;
-            if (currentFilterMonth === 'R1') list = list.filter(d => d.day >= 1 && d.day <= 30);
-            else if (currentFilterMonth === 'R2') list = list.filter(d => d.day >= 31 && d.day <= 60);
-            else if (currentFilterMonth === 'R3') list = list.filter(d => d.day >= 61 && d.day <= 90);
-            else if (currentFilterMonth === 'R4') list = list.filter(d => d.day >= 91 && d.day <= 180);
-            else if (currentFilterMonth === 'R5') list = list.filter(d => d.day >= 181 && d.day <= 270);
-            else if (currentFilterMonth === 'R6') list = list.filter(d => d.day >= 271 && d.day <= 365);
-
-            list.forEach(item => {
-                const isUnlocked = isTestMode || (todayDay > 0 && item.day <= todayDay);
-                const isToday = item.day === (todayDay === 0 ? 1 : todayDay);
-
-                const card = document.createElement('div');
-                let bgStyle = "bg-cream border-gray-200 text-gray-400 opacity-75";
-                if (isUnlocked) bgStyle = "bg-white border-warmPink text-gray-700 hover:bg-pastelYellow cursor-pointer shadow-sm";
-                if (isToday) bgStyle = "bg-pastelYellow border-accentPink text-gray-800 font-bold ring-2 ring-accentPink cursor-pointer shadow-md";
-
-                card.className = `p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between text-center transition transform active:scale-95 ${bgStyle}`;
-                card.onclick = () => openModal(item.day);
-
-                card.innerHTML = `
-                    <div class="text-[10px] text-gray-400 font-bold mb-1">${item.dateStr}</div>
-                    <div class="my-1">
-                        ${isUnlocked 
-                            ? `<i class="fa-solid ${isToday ? 'fa-star text-amber-400 text-lg' : 'fa-envelope-open-text text-accentPink text-base'}"></i>` 
-                            : `<i class="fa-solid fa-lock text-gray-300 text-base"></i>`
-                        }
-                    </div>
-                    <div class="text-xs font-black mt-1">D-${item.day}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openModal(day) {
-            activeModalDay = day;
-            const data = fortuneDatabase.find(d => d.day === day);
-            if (!data) return;
-
-            const modal = document.getElementById('fortune-modal');
-            const todayDay = getCurrentDayNumber();
-            const isUnlocked = isTestMode || (todayDay > 0 && day <= todayDay);
-
-            document.getElementById('modal-badge').innerText = `Day ${data.day} · ${data.dateStr}`;
-            
-            if (isUnlocked) {
-                renderModalUnlockedContent(data);
-                triggerConfetti();
-            } else {
-                document.getElementById('modal-mascot').src = CUSTOM_MASCOTS.locked;
-                document.getElementById('modal-title').innerText = "未完待續...";
-
-                document.getElementById('modal-unlocked-body').classList.add('hidden');
-                document.getElementById('modal-locked-body').classList.remove('hidden');
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function renderModalUnlockedContent(data) {
-            document.getElementById('modal-mascot').src = CUSTOM_MASCOTS.happy;
-            document.getElementById('modal-title').innerText = data.title;
-            document.getElementById('modal-stars').innerText = data.stars;
-            document.getElementById('modal-color').innerText = data.color;
-            document.getElementById('modal-item').innerText = data.item;
-            document.getElementById('modal-content').innerText = data.content;
-
-            document.getElementById('modal-unlocked-body').classList.remove('hidden');
-            document.getElementById('modal-locked-body').classList.add('hidden');
-        }
-
-        function forceUnlockCurrentModal() {
-            const data = fortuneDatabase.find(d => d.day === activeModalDay) || fortuneDatabase[0];
-            renderModalUnlockedContent(data);
-            triggerConfetti();
-        }
-
-        function previewDayCard(day) {
-            openModal(day);
-            forceUnlockCurrentModal();
-        }
-
-        function closeModal() {
-            document.getElementById('fortune-modal').classList.add('hidden');
-        }
-
-        function triggerConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 60,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-            }
-        }
-
-        function createHeartParticles() {
-            const container = document.getElementById('particles-container');
-            container.innerHTML = '';
-            const icons = ['❤️', '✨', '🌸', '⭐', '🎈'];
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'heart-particle';
-                particle.innerText = icons[Math.floor(Math.random() * icons.length)];
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.animationDuration = `${4 + Math.random() * 6}s`;
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                particle.style.fontSize = `${12 + Math.random() * 16}px`;
-                container.appendChild(particle);
-            }
-        }
-
-        window.onload = initApp;
-    </script>
+  </div>
+
+  <script>
+    const messages = {
+      1: { title: "teaser26歲生日快樂！今日你係大佬😼", content: "瓜瓜26歲了，好開心可以同你度過4年嘅生日。前兩年都係回顧，今年我希望可以同你展望未來。新一年，pizza同每日打氣站會同你一齊度過！🍕❤️🦊" },
+      2: { title: "今日都會很好的！🤩", content: "係唔係好期待每日開打氣小卡呢～\n\n雖然過完生日，但個勢會keep住好的！好日子壞日子，都有打氣小卡陪你，每日有驚喜🎉" },
+      14: { title: "新年行大運🤑", content: "新年快樂！又到年初一，係時候逗好多好多利是😆🧧" },
+      60: { title: "🇹🇼 TW x JP 🇯🇵 之旅啟程✈️", content: "今晚就飛台北啦！上一次已經係23年嘅事，仲要係為咗結婚，但明明唔可以，笑死。好期待好期待，祝我哋旅程愉快！❤️" },
+      61: { title: "Pizza der Birthday☺️", content: "好開心好開心，第一次出國慶生，仲要喺日本！多謝瓜瓜plan咗呢個trip❤️今日都要玩得盡興！！" }
+    };
+
+    const startDate = new Date("2027-01-24");
+    const today = new Date();
+    document.getElementById("today-date").innerText = today.toLocaleDateString();
+
+    function getDayIndex() {
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      return diffDays > 0 ? diffDays : 1;
+    }
+
+    function triggerConfetti() {
+      const scalar = 2.5;
+      const pizza = confetti.shapeFromText({ text: '🍕', scalar });
+      const fox = confetti.shapeFromText({ text: '🦊', scalar });
+      const cake = confetti.shapeFromText({ text: '🎂', scalar });
+      const heart = confetti.shapeFromText({ text: '❤️', scalar });
+
+      confetti({
+        particleCount: 30,
+        spread: 100,
+        origin: { y: 0.5 },
+        shapes: [pizza, fox, cake, heart],
+        scalar: 2,
+        ticks: 250,
+        gravity: 0.4,
+        drift: 0
+      });
+    }
+
+    function openTodayCard() {
+      const day = getDayIndex();
+      const data = messages[day] || { title: `Day ${day} 打氣小卡`, content: "今日也要加油喔！永遠支持你！💪❤️" };
+      document.getElementById("mTitle").innerText = data.title;
+      document.getElementById("mContent").innerText = data.content;
+      document.getElementById("cardModal").style.display = "flex";
+      triggerConfetti();
+    }
+
+    function closeModal() {
+      document.getElementById("cardModal").style.display = "none";
+    }
+  </script>
 </body>
+</html>
 </html>
